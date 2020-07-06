@@ -14,25 +14,19 @@ public class DeferredInvoker
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    // Update is called once per frame
-    public void clear()
+    public void Clear()
     {
         _entries.Clear();
     }
 
     // Update is called once per frame
-    public void push(Action func)
+    public void Push(Action func)
     {
         _entries.Add(func);
     }
 
     // Update is called once per frame
-    public bool resume()
+    public bool Resume()
     {
         if(_entries.Count == 0) {
             return false;
