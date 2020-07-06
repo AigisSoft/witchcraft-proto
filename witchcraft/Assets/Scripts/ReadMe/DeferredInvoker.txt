@@ -1,0 +1,28 @@
+// Test Code
+void Start()
+{
+    DeferredInvoker invoker = new DeferredInvoker();
+    Action func1 = delegate {test(invoker, 1);};
+    Action func2 = delegate {test(invoker, 2);};
+    Action func3 = delegate {test(invoker, 3);};
+
+    invoker.push(func1);
+    invoker.push(func2);
+    invoker.push(func3);
+    invoker.resume();
+}
+
+void test(DeferredInvoker invoker, int value)
+{
+    Debug.Log(value);
+    invoker.resume();
+}
+
+// Logs
+1
+UnityEngine.Debug:Log(Object)
+2
+UnityEngine.Debug:Log(Object)
+3
+UnityEngine.Debug:Log(Object)
+
