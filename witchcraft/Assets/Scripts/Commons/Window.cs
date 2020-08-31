@@ -1,22 +1,39 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 
 namespace Commons
 {
     public class Window : MonoBehaviour
     {
-        // Start is called before the first frame update
-        void Start()
+        private string windowName = string.Empty;
+        public string WinndowName
         {
-
+            get
+            {
+                return windowName;
+            }
+            set
+            {
+                windowName = value;
+            }
         }
 
-        // Update is called once per frame
-        void Update()
+        private WindowType type = WindowType.none;
+        public WindowType Type
         {
+            get { return type; }
+            set { type = value; }
+        }
 
+        public virtual bool Initialize()
+        {
+            return true;
+        }
+
+        public virtual void Close()
+        {
         }
     }
 }
