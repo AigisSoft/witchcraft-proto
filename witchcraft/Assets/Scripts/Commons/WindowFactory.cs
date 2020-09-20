@@ -1,4 +1,9 @@
-﻿using System.Collections;
+﻿/*
+ * Window生成処理を行うクラス
+ * 
+ */
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,7 +11,7 @@ namespace Commons
 {
     public class WindowFactory : MonoBehaviour
     {
-        public GameObject MessageDialogObj;
+        private GameObject MessageDialogObj;
 
 
         private List<GameObject> windowObjList = null;
@@ -34,6 +39,10 @@ namespace Commons
 
         }
 
+        /// <summary>
+        /// プレハブの読み込み処理
+        /// </summary>
+        /// <returns></returns>
         private bool LoadPlefab()
         {
             MessageDialogObj = (GameObject)Resources.Load("Prefabs/Window/MessageDialog");
@@ -43,6 +52,10 @@ namespace Commons
             return true;
         }
 
+        /// <summary>
+        /// メッセージダイアログを生成
+        /// </summary>
+        /// <returns></returns>
         public GameObject MessageDialogCreate()
         {
             if(MessageDialogObj == null)
@@ -60,7 +73,10 @@ namespace Commons
             return _obj;
         }
 
-
+        /// <summary>
+        /// Window削除
+        /// </summary>
+        /// <param name="i_destroyObj"></param>
         public void DestroyWindow(GameObject i_destroyObj)
         {
             int index = windowObjList.IndexOf(i_destroyObj);

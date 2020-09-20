@@ -1,4 +1,8 @@
-﻿using System.Collections;
+﻿/*
+ * Windowの管理を行う
+ */
+
+using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.ConstrainedExecution;
 using UnityEngine;
@@ -26,20 +30,15 @@ namespace Commons
 
         private WindowFactory factory = null;
 
-        //初期化
+        /// <summary>
+        /// 初期化
+        /// </summary>
         public override void Initialize()
         {
             windowList = new List<Window>();
             canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
 
             factory = WindowFactory.Instance;
-        }
-
-
-        // Start is called before the first frame update
-        void Start()
-        {
-
         }
 
         public MessageDialog MessageDialogCreate(string i_message)
