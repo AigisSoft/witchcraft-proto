@@ -5,19 +5,49 @@ using UnityEngine.UI;
 
 namespace Commons
 {
-    public class Window : MonoBehaviour
+    /// <summary>
+    /// 基底パラメータ
+    /// </summary>
+    public struct WindowParameter
     {
-        private string windowName = string.Empty;
-        public string WinndowName
+        string WindowName;
+        private Vector2Int windowPosition;
+        public Vector2Int WindowPosition
         {
             get
             {
-                return windowName;
+                return windowPosition;
             }
             set
             {
-                windowName = value;
+                //位置変更時に更新処理を行う
+                windowPosition = value;
             }
+        }
+
+        private Vector2Int windowSize;
+        public Vector2Int WindowSize
+        {
+            get
+            {
+                return windowSize;
+            }
+            set
+            {
+                //サイズ変更時に更新処理をおこなう
+                windowSize = value;
+            }
+        }
+
+    }
+
+    public class Window : MonoBehaviour
+    {
+        private WindowParameter parameter;
+        public WindowParameter Parameter
+        {
+            get { return parameter; }
+            set { parameter = value; }
         }
 
         private WindowType type = WindowType.none;
