@@ -85,6 +85,57 @@ public class InputManager : SingletonMonoBehaviour<InputManager>
         holdInput[code] += callback;
     }
 
+    /// <summary>
+    /// upInputに登録されているイベントのリムーブを行う
+    /// </summary>
+    /// <param name="callback">登録されているコールバック</param>
+    public void RemoveUpInput(Action callback)
+    {
+        foreach(var code in upInput)
+        {
+            if (code.Value == callback)
+            {
+                upInput.Remove(code.Key);
+                break;
+            }
+        }
+    }
+
+    /// <summary>
+    /// downInputに登録されているイベントのリムーブを行う
+    /// </summary>
+    /// <param name="callback">登録されているコールバック</param>
+    public void RemoveDownInput(Action callback)
+    {
+        foreach (var code in downInput)
+        {
+            if (code.Value == callback)
+            {
+                downInput.Remove(code.Key);
+                break;
+            }
+        }
+    }
+
+    /// <summary>
+    /// holdInputに登録されているイベントのリムーブを行う
+    /// </summary>
+    /// <param name="callback">登録されているコールバック</param>
+    public void RemoveHoldInput(Action callback)
+    {
+        foreach (var code in holdInput)
+        {
+            if (code.Value == callback)
+            {
+                holdInput.Remove(code.Key);
+                break;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 登録してあるイベントを全て削除
+    /// </summary>
     public void ClearInput()
     {
         upInput.Clear();
