@@ -84,4 +84,11 @@ public class InputManager : SingletonMonoBehaviour<InputManager>
         }
         holdInput[code] += callback;
     }
+
+    public void ClearInput()
+    {
+        upInput.Clear();
+        downInput.Clear();
+        holdInput.Clear();
+    }
 }
