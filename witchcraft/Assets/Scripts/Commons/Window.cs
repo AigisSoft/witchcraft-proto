@@ -10,7 +10,12 @@ namespace Commons
     /// </summary>
     public struct WindowParameter
     {
-        string WindowName;
+        private string windowName;
+        public string WindowName
+        {
+            get { return windowName; }
+        }
+
         private Vector2Int windowPosition;
         public Vector2Int WindowPosition
         {
@@ -20,7 +25,7 @@ namespace Commons
             }
             set
             {
-                //位置変更時に更新処理を行う
+
                 windowPosition = value;
             }
         }
@@ -34,7 +39,6 @@ namespace Commons
             }
             set
             {
-                //サイズ変更時に更新処理をおこなう
                 windowSize = value;
             }
         }
@@ -50,20 +54,28 @@ namespace Commons
             set { parameter = value; }
         }
 
-        private WindowType type = WindowType.none;
+        private WindowType type = WindowType.None;
         public WindowType Type
         {
             get { return type; }
             set { type = value; }
         }
 
+        /// <summary>
+        /// 初期化処理
+        /// </summary>
+        /// <returns></returns>
         public virtual bool Initialize()
         {
             return true;
         }
 
+        /// <summary>
+        /// 閉じる
+        /// </summary>
         public virtual void Close()
         {
+            //ManagerのClose時処理を呼ぶようにする
         }
     }
 }

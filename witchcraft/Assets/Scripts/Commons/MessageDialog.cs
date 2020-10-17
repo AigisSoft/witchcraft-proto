@@ -15,6 +15,10 @@ public class MessageDialog : Commons.Window
 
     private Text messageText = null;
 
+    /// <summary>
+    /// 初期化
+    /// </summary>
+    /// <returns></returns>
     public override bool Initialize()
     {
         if(!base.Initialize())

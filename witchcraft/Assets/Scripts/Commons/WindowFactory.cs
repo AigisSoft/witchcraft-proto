@@ -1,9 +1,4 @@
-﻿/*
- * Window生成処理を行うクラス
- * 
- */
-
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,7 +7,6 @@ namespace Commons
     public class WindowFactory : MonoBehaviour
     {
         private GameObject MessageDialogObj;
-
 
         private List<GameObject> windowObjList = null;
         static private WindowFactory instance = null;
@@ -49,6 +43,7 @@ namespace Commons
             if (MessageDialogObj == null)
                 return false;
 
+
             return true;
         }
 
@@ -79,14 +74,14 @@ namespace Commons
         /// <param name="i_destroyObj"></param>
         public void DestroyWindow(GameObject i_destroyObj)
         {
-            int index = windowObjList.IndexOf(i_destroyObj);
-            if (index == -1)
+            int _index = windowObjList.IndexOf(i_destroyObj);
+            if (_index == -1)
             {
                 return;
             }
 
-            Destroy(windowObjList[index]);
-            windowObjList.RemoveAt(index);
+            Destroy(windowObjList[_index]);
+            windowObjList.RemoveAt(_index);
         }
     }
 }

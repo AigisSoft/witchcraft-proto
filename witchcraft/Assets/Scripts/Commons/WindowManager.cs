@@ -1,8 +1,4 @@
-﻿/*
- * Windowの管理を行う
- */
-
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.ConstrainedExecution;
 using UnityEngine;
@@ -11,17 +7,15 @@ using UnityEngine.UI;
 namespace Commons
 {
     public enum WindowType
-    {
-        none,
+    {//TODO:スネークに変更数
+        None,
         MessageDialog,
     }
 
-    public enum WINDOW_ERROR
-    {
-        NONE = 0x0000,
 
-        CREATE_ERROR = 0x0100,
-    }
+    //TODO:AllClose的な関数の追加
+    //TODO:Reopen(再表示)的な機能の追加、Openないで判断
+
 
     public class WindowManager : Singleton<WindowManager>
     {
@@ -29,6 +23,29 @@ namespace Commons
         static Canvas canvas = null;
 
         private WindowFactory factory = null;
+        public enum RESULT_CODE
+        {
+            SUCCESS = 0x0000,
+
+            CREATE_ERROR = 0x0100,
+        }
+
+        /// <summary>
+        /// 解放処理
+        /// </summary>
+        ~WindowManager()
+        {
+            if (windowList != null)
+            {
+                if (windowList.Count > 0)
+                {
+                    foreach (Window _wid in windowList)
+                    {
+                        _wid.Close();
+                    }
+                }
+            }
+        }
 
         /// <summary>
         /// 初期化
@@ -41,7 +58,9 @@ namespace Commons
             factory = WindowFactory.Instance;
         }
 
-        public MessageDialog MessageDialogCreate(string i_message)
+        //TODO:インスタンス生成を外で引数で渡す
+        //Create→Open 
+        public MessageDialog CreateMessageDialog(string i_message)
         {
             GameObject _obj = factory.MessageDialogCreate();
             if(_obj == null)
@@ -63,6 +82,10 @@ namespace Commons
             return _md;
         }
 
+        /// <summary>
+        /// Windowの削除
+        /// </summary>
+        /// <param name="i_window"></param>
         public void DestroyWindow(Window i_window)
         {
             if(i_window == null)
@@ -73,21 +96,6 @@ namespace Commons
             i_window.Close();
             windowList.Remove(i_window);
             factory.DestroyWindow(i_window.gameObject);
-        }
-
-        //解放処理
-        ~WindowManager()
-        {
-            if(windowList != null)
-            {
-                if (windowList.Count > 0)
-                {
-                    foreach (Window _wid in windowList)
-                    {
-                        _wid.Close();
-                    }
-                }
-            }
         }
     }
 }
