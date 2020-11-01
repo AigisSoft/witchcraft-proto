@@ -35,7 +35,17 @@ public class MessageDialog : Commons.Window
         UpdateMessage();
         return true;
     }
-    
+
+    public override void OnOpen()
+    {
+        base.OnOpen();
+    }
+
+    public override void OnClose()
+    {
+        base.OnClose();
+    }
+
     /// <summary>
     /// メッセージ更新処理
     /// </summary>

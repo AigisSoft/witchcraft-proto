@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -47,6 +48,12 @@ namespace Commons
 
     public class Window : MonoBehaviour
     {
+        private Action onOpened = null;
+        private Action onClosed = null;
+
+        private bool isOpen = false;
+        public bool IsOpne = true;
+
         private WindowParameter parameter;
         public WindowParameter Parameter
         {
@@ -54,7 +61,7 @@ namespace Commons
             set { parameter = value; }
         }
 
-        private WindowType type = WindowType.None;
+        private WindowType type = WindowType.NONE;
         public WindowType Type
         {
             get { return type; }
@@ -71,11 +78,40 @@ namespace Commons
         }
 
         /// <summary>
-        /// 閉じる
+        /// Windowを開く(表示する)
+        /// Managerから呼び出される
         /// </summary>
-        public virtual void Close()
+        /// <returns></returns>
+        public virtual void OnOpen()
         {
-            //ManagerのClose時処理を呼ぶようにする
+            if (isOpen)
+                throw new Exception(parameter.WindowName + " is already open.");
+            isOpen = true;
+
+            if (onOpened != null)
+                onOpened?.Invoke();
+        }
+
+        /// <summary>
+        /// Windowを閉じる(非表示にする)
+        /// Managerから呼び出される
+        /// </summary>
+        public virtual void OnClose()
+        {
+            if (!isOpen)
+                throw new Exception(parameter.WindowName + " is already close.");
+            isOpen = false;
+
+            if (onClosed != null)
+                onClosed?.Invoke();
+        }
+
+        /// <summary>
+        /// 自己破棄処理
+        /// </summary>
+        public void SelfDestroy()
+        {
+            Destroy(gameObject);
         }
     }
 }

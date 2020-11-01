@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.ConstrainedExecution;
 using UnityEngine;
@@ -7,22 +8,16 @@ using UnityEngine.UI;
 namespace Commons
 {
     public enum WindowType
-    {//TODO:スネークに変更数
-        None,
-        MessageDialog,
+    {
+        NONE,
+        MESSAGE_DIALOG
     }
-
-
-    //TODO:AllClose的な関数の追加
-    //TODO:Reopen(再表示)的な機能の追加、Openないで判断
-
 
     public class WindowManager : Singleton<WindowManager>
     {
         static private List<Window> windowList = null;
         static Canvas canvas = null;
 
-        private WindowFactory factory = null;
         public enum RESULT_CODE
         {
             SUCCESS = 0x0000,
@@ -41,7 +36,7 @@ namespace Commons
                 {
                     foreach (Window _wid in windowList)
                     {
-                        _wid.Close();
+                        _wid.OnClose();
                     }
                 }
             }
@@ -54,48 +49,109 @@ namespace Commons
         {
             windowList = new List<Window>();
             canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
-
-            factory = WindowFactory.Instance;
         }
 
-        //TODO:インスタンス生成を外で引数で渡す
-        //Create→Open 
-        public MessageDialog CreateMessageDialog(string i_message)
+        /// <summary>
+        /// Windowを表示させる
+        /// </summary>
+        /// <param name="openWindow"></param>
+        public void OpenWindow(Window openWindow)
         {
-            GameObject _obj = factory.MessageDialogCreate();
-            if(_obj == null)
+            try
             {
-               return null;
+                openWindow.OnOpen();
+
+                bool reopneFlg = false;
+                for(int index = 0;index < windowList.Count; index++)
+                {
+                    if(windowList[index] == openWindow)
+                    {
+                        reopneFlg = true;
+                        break;
+                    }
+                }
+
+                if (!reopneFlg)
+                    openWindow.transform.parent = canvas.transform;
+
+                windowList.Add(openWindow);
             }
-
-            MessageDialog _md = _obj.AddComponent<MessageDialog>();
-
-            _md.Message = i_message;
-
-            if(!_md.Initialize())
+            catch(NullReferenceException)
             {
-                factory.DestroyWindow(_obj);
-                return null;
+                Console.WriteLine("WindowManager::OpenWindow : openWindow is null");
             }
+            catch (Exception err)
+            {
+                Console.WriteLine("WindowManager::OpenWindow : " + err.Message);
+            }
+        }
 
-            windowList.Add(_md);
-            return _md;
+        /// <summary>
+        /// Windowを非表示にする
+        /// </summary>
+        /// <param name="closeWindow"></param>
+        public void CloseWindow(Window closeWindow)
+        {
+            try
+            {
+                closeWindow.OnClose();
+            }
+            catch (NullReferenceException)
+            {
+                Console.WriteLine("WindowManager::CloseWindow : closeWindow is null");
+            }
+            catch (Exception err)
+            {
+                Console.WriteLine("WindowManager::CloseWindow : " + err.Message);
+            }
         }
 
         /// <summary>
         /// Windowの削除
         /// </summary>
-        /// <param name="i_window"></param>
-        public void DestroyWindow(Window i_window)
+        /// <param name="destroyWindow"></param>
+        public void DestroyWindow(Window destroyWindow)
         {
-            if(i_window == null)
+            try
             {
-                return;
+                if(!destroyWindow.IsOpne)
+                {
+                    CloseWindow(destroyWindow);
+                }
+
+                windowList.Remove(destroyWindow);
+
+                destroyWindow.transform.parent = null;
+                destroyWindow.SelfDestroy();
+            }
+            catch (NullReferenceException)
+            {
+                Console.WriteLine("WindowManager::DestroyWindow : destroyWindow is null");
+            }
+            catch (Exception err)
+            {
+                Console.WriteLine("WindowManager::DestroyWindow : " + err.Message);
+            }
+        }
+
+        /// <summary>
+        /// 現在表示しているWindowをすべて非表示にする
+        /// </summary>
+        public void AllCloseWindow()
+        {
+            try
+            {
+                for (int index = 0; index < windowList.Count; index++)
+                {
+                    if (windowList[index].IsOpne)
+                        CloseWindow(windowList[index]);
+                }
+            }
+            catch (NullReferenceException)
+            {
+                Console.WriteLine("WindowManager::AllCloseWindow : windowList is null");
             }
 
-            i_window.Close();
-            windowList.Remove(i_window);
-            factory.DestroyWindow(i_window.gameObject);
         }
     }
 }
