@@ -7,6 +7,15 @@ using UnityEngine.UI;
 namespace Commons
 {
     /// <summary>
+    /// Windowの種類
+    /// </summary>
+    public enum WindowType
+    {
+        NONE,
+        MESSAGE_DIALOG
+    }
+
+    /// <summary>
     /// 基底パラメータ
     /// </summary>
     public struct WindowParameter
@@ -15,35 +24,36 @@ namespace Commons
         public string WindowName
         {
             get { return windowName; }
+            set { windowName = value; }
         }
 
         private Vector2Int windowPosition;
         public Vector2Int WindowPosition
         {
-            get
-            {
-                return windowPosition;
-            }
-            set
-            {
-
-                windowPosition = value;
-            }
+            get { return windowPosition; }
+            set { windowPosition = value; }
         }
 
         private Vector2Int windowSize;
         public Vector2Int WindowSize
         {
-            get
-            {
-                return windowSize;
-            }
-            set
-            {
-                windowSize = value;
-            }
+            get { return windowSize; }
+            set { windowSize = value; }
         }
 
+        private bool isMultiInstance;
+        public bool IsMultiInstance
+        {
+            get { return isMultiInstance; }
+            set { isMultiInstance = value; }
+        }
+
+        private WindowType type;
+        public WindowType Type
+        {
+            get { return type; }
+            set { type = value; }
+        }
     }
 
     public class Window : MonoBehaviour
@@ -59,13 +69,6 @@ namespace Commons
         {
             get { return parameter; }
             set { parameter = value; }
-        }
-
-        private WindowType type = WindowType.NONE;
-        public WindowType Type
-        {
-            get { return type; }
-            set { type = value; }
         }
 
         /// <summary>

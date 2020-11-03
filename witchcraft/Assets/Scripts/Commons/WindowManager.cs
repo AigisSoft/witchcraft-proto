@@ -7,12 +7,6 @@ using UnityEngine.UI;
 
 namespace Commons
 {
-    public enum WindowType
-    {
-        NONE,
-        MESSAGE_DIALOG
-    }
-
     public class WindowManager : Singleton<WindowManager>
     {
         static private List<Window> windowList = null;
@@ -59,8 +53,22 @@ namespace Commons
         {
             try
             {
+                //マルチインスタンス不可の場合
+                if(!openWindow.Parameter.IsMultiInstance)
+                {
+                    for (int index = 0; index < windowList.Count; index++)
+                    {
+                        if (windowList[index].Parameter.Type == openWindow.Parameter.Type)
+                        {
+                            throw new Exception("MultiInstance is false.\n");
+                        }
+                    }
+                }
+
                 openWindow.OnOpen();
 
+                //List内に同じインスタンスがなければ追加する
+                //同じインスタンスを持っているときは再表示したものとしてListに追加しない
                 bool reopneFlg = false;
                 for(int index = 0;index < windowList.Count; index++)
                 {
@@ -70,7 +78,6 @@ namespace Commons
                         break;
                     }
                 }
-
                 if (!reopneFlg)
                     openWindow.transform.parent = canvas.transform;
 
