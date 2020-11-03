@@ -32,24 +32,40 @@ public class MessageDialog : Commons.Window
             return false;
         }
 
-        UpdateMessage();
+        UpdateLayout();
         return true;
     }
 
+    /// <summary>
+    /// 表示時処理
+    /// </summary>
     public override void OnOpen()
     {
         base.OnOpen();
     }
 
+    /// <summary>
+    /// 非表示時処理
+    /// </summary>
     public override void OnClose()
     {
         base.OnClose();
     }
 
     /// <summary>
+    /// 描画更新
+    /// </summary>
+    public override void UpdateLayout()
+    {
+        base.UpdateLayout();
+
+        UpdateMessage();
+    }
+
+    /// <summary>
     /// メッセージ更新処理
     /// </summary>
-    public void UpdateMessage()
+    private void UpdateMessage()
     {
         messageText.text = message;
     }

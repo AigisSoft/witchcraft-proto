@@ -78,7 +78,7 @@ namespace Commons
         }
 
         /// <summary>
-        /// Windowを開く(表示する)
+        /// 表示時処理
         /// Managerから呼び出される
         /// </summary>
         /// <returns></returns>
@@ -93,7 +93,7 @@ namespace Commons
         }
 
         /// <summary>
-        /// Windowを閉じる(非表示にする)
+        /// 非表示時処理
         /// Managerから呼び出される
         /// </summary>
         public virtual void OnClose()
@@ -104,6 +104,14 @@ namespace Commons
 
             if (onClosed != null)
                 onClosed?.Invoke();
+        }
+
+        /// <summary>
+        /// 描画更新
+        /// </summary>
+        public virtual void UpdateLayout()
+        {
+
         }
 
         /// <summary>
