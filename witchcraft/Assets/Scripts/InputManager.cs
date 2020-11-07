@@ -5,11 +5,11 @@ using System;
 
 public class InputManager : SingletonMonoBehaviour<InputManager>
 {
-    Dictionary<KeyCode, Action> upInput = new Dictionary<KeyCode, Action>();
+    Dictionary<KeyCode, Action> upInputCallbackTable = new Dictionary<KeyCode, Action>();
 
-    Dictionary<KeyCode, Action> downInput = new Dictionary<KeyCode, Action>();
+    Dictionary<KeyCode, Action> downInputCallbackTable = new Dictionary<KeyCode, Action>();
 
-    Dictionary<KeyCode, Action> holdInput = new Dictionary<KeyCode, Action>();
+    Dictionary<KeyCode, Action> holdInputCallbackTable = new Dictionary<KeyCode, Action>();
 
 
     /// <summary>
@@ -17,7 +17,7 @@ public class InputManager : SingletonMonoBehaviour<InputManager>
     /// </summary>
     void Update()
     {
-        foreach(var code in upInput)
+        foreach(var code in upInputCallbackTable)
         {
             if (Input.GetKeyUp(code.Key))
             {
@@ -25,7 +25,7 @@ public class InputManager : SingletonMonoBehaviour<InputManager>
             }
         }
 
-        foreach (var code in downInput)
+        foreach (var code in downInputCallbackTable)
         {
             if (Input.GetKeyDown(code.Key))
             {
@@ -33,14 +33,13 @@ public class InputManager : SingletonMonoBehaviour<InputManager>
             }
         }
 
-        foreach (var code in holdInput)
+        foreach (var code in holdInputCallbackTable)
         {
             if (Input.GetKey(code.Key))
             {
                 code.Value?.Invoke();
             }
         }
-
     }
 
     /// <summary>
@@ -48,13 +47,14 @@ public class InputManager : SingletonMonoBehaviour<InputManager>
     /// </summary>
     /// <param name="code">キーコード</param>
     /// <param name="callback">コールバック</param>
-    public void SetUpInput(KeyCode code, Action callback)
+    public void SetUpInputCallback(KeyCode code, Action callback)
     {
-        if (!upInput.ContainsKey(code))
+        if (!upInputCallbackTable.ContainsKey(code))
         {
-            upInput.Add(code, null);
+            upInputCallbackTable.Add(code, callback);
+            return;
         }
-        upInput[code] += callback;
+        upInputCallbackTable[code] += callback;
     }
 
     /// <summary>
@@ -62,13 +62,14 @@ public class InputManager : SingletonMonoBehaviour<InputManager>
     /// </summary>
     /// <param name="code">キーコード</param>
     /// <param name="callback">コールバック</param>
-    public void SetDownInput(KeyCode code, Action callback)
+    public void SetDownInputCallback(KeyCode code, Action callback)
     {
-        if (!downInput.ContainsKey(code))
+        if (!downInputCallbackTable.ContainsKey(code))
         {
-            downInput.Add(code, null);
+            downInputCallbackTable.Add(code, callback);
+            return;
         }
-        downInput[code] += callback;
+        downInputCallbackTable[code] += callback;
     }
 
     /// <summary>
@@ -76,13 +77,14 @@ public class InputManager : SingletonMonoBehaviour<InputManager>
     /// </summary>
     /// <param name="code">キーコード</param>
     /// <param name="callback">コールバック</param>
-    public void SetHoldInput(KeyCode code, Action callback)
+    public void SetHoldInputCallback(KeyCode code, Action callback)
     {
-        if (!holdInput.ContainsKey(code))
+        if (!holdInputCallbackTable.ContainsKey(code))
         {
-            holdInput.Add(code, null);
+            holdInputCallbackTable.Add(code, callback);
+            return;
         }
-        holdInput[code] += callback;
+        holdInputCallbackTable[code] += callback;
     }
 
     /// <summary>
@@ -91,11 +93,11 @@ public class InputManager : SingletonMonoBehaviour<InputManager>
     /// <param name="callback">登録されているコールバック</param>
     public void RemoveUpInput(Action callback)
     {
-        foreach(var code in upInput)
+        foreach(var code in upInputCallbackTable)
         {
             if (code.Value == callback)
             {
-                upInput.Remove(code.Key);
+                upInputCallbackTable.Remove(code.Key);
                 break;
             }
         }
@@ -107,11 +109,11 @@ public class InputManager : SingletonMonoBehaviour<InputManager>
     /// <param name="callback">登録されているコールバック</param>
     public void RemoveDownInput(Action callback)
     {
-        foreach (var code in downInput)
+        foreach (var code in downInputCallbackTable)
         {
             if (code.Value == callback)
             {
-                downInput.Remove(code.Key);
+                downInputCallbackTable.Remove(code.Key);
                 break;
             }
         }
@@ -123,11 +125,11 @@ public class InputManager : SingletonMonoBehaviour<InputManager>
     /// <param name="callback">登録されているコールバック</param>
     public void RemoveHoldInput(Action callback)
     {
-        foreach (var code in holdInput)
+        foreach (var code in holdInputCallbackTable)
         {
             if (code.Value == callback)
             {
-                holdInput.Remove(code.Key);
+                holdInputCallbackTable.Remove(code.Key);
                 break;
             }
         }
@@ -138,8 +140,8 @@ public class InputManager : SingletonMonoBehaviour<InputManager>
     /// </summary>
     public void ClearInput()
     {
-        upInput.Clear();
-        downInput.Clear();
-        holdInput.Clear();
+        upInputCallbackTable.Clear();
+        downInputCallbackTable.Clear();
+        holdInputCallbackTable.Clear();
     }
 }
