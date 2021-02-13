@@ -5,11 +5,11 @@ using System;
 
 public class InputManager : SingletonMonoBehaviour<InputManager>
 {
-    Dictionary<KeyCode, Action> upInputCallbackTable = new Dictionary<KeyCode, Action>();
+    Dictionary<KeyCode, List<Action>> upInputCallbackTable = new Dictionary<KeyCode, List<Action>>();
 
-    Dictionary<KeyCode, Action> downInputCallbackTable = new Dictionary<KeyCode, Action>();
+    Dictionary<KeyCode, List<Action>> downInputCallbackTable = new Dictionary<KeyCode, List<Action>>();
 
-    Dictionary<KeyCode, Action> holdInputCallbackTable = new Dictionary<KeyCode, Action>();
+    Dictionary<KeyCode, List<Action>> holdInputCallbackTable = new Dictionary<KeyCode, List<Action>>();
 
 
     /// <summary>
@@ -21,7 +21,10 @@ public class InputManager : SingletonMonoBehaviour<InputManager>
         {
             if (Input.GetKeyUp(code.Key))
             {
-                code.Value?.Invoke();
+                for (int i = 0; i < code.Value.Count; i++)
+                {
+                    code.Value[i]?.Invoke();
+                }
             }
         }
 
@@ -29,7 +32,10 @@ public class InputManager : SingletonMonoBehaviour<InputManager>
         {
             if (Input.GetKeyDown(code.Key))
             {
-                code.Value?.Invoke();
+                for (int i = 0; i < code.Value.Count; i++)
+                {
+                    code.Value[i]?.Invoke();
+                }
             }
         }
 
@@ -37,7 +43,10 @@ public class InputManager : SingletonMonoBehaviour<InputManager>
         {
             if (Input.GetKey(code.Key))
             {
-                code.Value?.Invoke();
+                for (int i = 0; i < code.Value.Count; i++)
+                {
+                    code.Value[i]?.Invoke();
+                }
             }
         }
     }
@@ -51,10 +60,9 @@ public class InputManager : SingletonMonoBehaviour<InputManager>
     {
         if (!upInputCallbackTable.ContainsKey(code))
         {
-            upInputCallbackTable.Add(code, callback);
-            return;
+            upInputCallbackTable.Add(code, new List<Action>());
         }
-        upInputCallbackTable[code] += callback;
+        upInputCallbackTable[code].Add(callback);
     }
 
     /// <summary>
@@ -66,10 +74,9 @@ public class InputManager : SingletonMonoBehaviour<InputManager>
     {
         if (!downInputCallbackTable.ContainsKey(code))
         {
-            downInputCallbackTable.Add(code, callback);
-            return;
+            downInputCallbackTable.Add(code, new List<Action>());
         }
-        downInputCallbackTable[code] += callback;
+        downInputCallbackTable[code].Add(callback);
     }
 
     /// <summary>
@@ -81,58 +88,40 @@ public class InputManager : SingletonMonoBehaviour<InputManager>
     {
         if (!holdInputCallbackTable.ContainsKey(code))
         {
-            holdInputCallbackTable.Add(code, callback);
+            holdInputCallbackTable.Add(code, new List<Action>());
             return;
         }
-        holdInputCallbackTable[code] += callback;
+        holdInputCallbackTable[code].Add(callback);
     }
 
     /// <summary>
     /// upInputに登録されているイベントのリムーブを行う
     /// </summary>
+    /// <param name="code">登録されているキーコード</param>
     /// <param name="callback">登録されているコールバック</param>
-    public void RemoveUpInput(Action callback)
+    public void RemoveUpInput(KeyCode code, Action callback)
     {
-        foreach(var code in upInputCallbackTable)
-        {
-            if (code.Value == callback)
-            {
-                upInputCallbackTable.Remove(code.Key);
-                break;
-            }
-        }
+        upInputCallbackTable[code].Remove(callback);
     }
 
     /// <summary>
     /// downInputに登録されているイベントのリムーブを行う
     /// </summary>
+    /// <param name="code">登録されているキーコード</param>
     /// <param name="callback">登録されているコールバック</param>
-    public void RemoveDownInput(Action callback)
+    public void RemoveDownInput(KeyCode code, Action callback)
     {
-        foreach (var code in downInputCallbackTable)
-        {
-            if (code.Value == callback)
-            {
-                downInputCallbackTable.Remove(code.Key);
-                break;
-            }
-        }
+        downInputCallbackTable[code].Remove(callback);
     }
 
     /// <summary>
     /// holdInputに登録されているイベントのリムーブを行う
     /// </summary>
+    /// <param name="code">登録されているキーコード</param>
     /// <param name="callback">登録されているコールバック</param>
-    public void RemoveHoldInput(Action callback)
+    public void RemoveHoldInput(KeyCode code, Action callback)
     {
-        foreach (var code in holdInputCallbackTable)
-        {
-            if (code.Value == callback)
-            {
-                holdInputCallbackTable.Remove(code.Key);
-                break;
-            }
-        }
+        holdInputCallbackTable[code].Remove(callback);
     }
 
     /// <summary>
