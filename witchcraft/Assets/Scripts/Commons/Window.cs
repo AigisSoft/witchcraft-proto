@@ -1,0 +1,128 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+namespace Commons
+{
+    /// <summary>
+    /// Windowの種類
+    /// </summary>
+    public enum WindowType
+    {
+        NONE,
+        MESSAGE_DIALOG
+    }
+
+    /// <summary>
+    /// 基底パラメータ
+    /// </summary>
+    public struct WindowParameter
+    {
+        private string windowName;
+        public string WindowName
+        {
+            get { return windowName; }
+            set { windowName = value; }
+        }
+
+        private Vector2Int windowPosition;
+        public Vector2Int WindowPosition
+        {
+            get { return windowPosition; }
+            set { windowPosition = value; }
+        }
+
+        private Vector2Int windowSize;
+        public Vector2Int WindowSize
+        {
+            get { return windowSize; }
+            set { windowSize = value; }
+        }
+
+        private bool isMultiInstance;
+        public bool IsMultiInstance
+        {
+            get { return isMultiInstance; }
+            set { isMultiInstance = value; }
+        }
+
+        private WindowType type;
+        public WindowType Type
+        {
+            get { return type; }
+            set { type = value; }
+        }
+    }
+
+    public class Window : MonoBehaviour
+    {
+        private Action onOpened = null;
+        private Action onClosed = null;
+
+        private bool isOpen = false;
+        public bool IsOpne = true;
+
+        private WindowParameter parameter;
+        public WindowParameter Parameter
+        {
+            get { return parameter; }
+            set { parameter = value; }
+        }
+
+        /// <summary>
+        /// 初期化処理
+        /// </summary>
+        /// <returns></returns>
+        public virtual bool Initialize()
+        {
+            return true;
+        }
+
+        /// <summary>
+        /// 表示時処理
+        /// Managerから呼び出される
+        /// </summary>
+        /// <returns></returns>
+        public virtual void OnOpen()
+        {
+            if (isOpen)
+                throw new Exception(parameter.WindowName + " is already open.");
+            isOpen = true;
+
+            if (onOpened != null)
+                onOpened?.Invoke();
+        }
+
+        /// <summary>
+        /// 非表示時処理
+        /// Managerから呼び出される
+        /// </summary>
+        public virtual void OnClose()
+        {
+            if (!isOpen)
+                throw new Exception(parameter.WindowName + " is already close.");
+            isOpen = false;
+
+            if (onClosed != null)
+                onClosed?.Invoke();
+        }
+
+        /// <summary>
+        /// 描画更新
+        /// </summary>
+        public virtual void UpdateLayout()
+        {
+
+        }
+
+        /// <summary>
+        /// 自己破棄処理
+        /// </summary>
+        public void SelfDestroy()
+        {
+            Destroy(gameObject);
+        }
+    }
+}
