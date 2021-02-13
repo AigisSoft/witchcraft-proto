@@ -16,7 +16,13 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: 78f841cd7940d664ebb82b3c4034036a
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 12d7d7107e819a342bd2bd9f22f8fd9c
+    m_Address: Assets/Audio/sample_bgm.mp3
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    m_MainAsset: {fileID: 0}
+    m_TargetAsset: {fileID: 0}
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 7e52d9ed096b8b446a16598b2b286cb3, type: 2}
   m_SchemaSet:
