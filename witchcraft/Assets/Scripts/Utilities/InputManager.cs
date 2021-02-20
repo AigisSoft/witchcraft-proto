@@ -89,7 +89,6 @@ public class InputManager : SingletonMonoBehaviour<InputManager>
         if (!holdInputCallbackTable.ContainsKey(code))
         {
             holdInputCallbackTable.Add(code, new List<Action>());
-            return;
         }
         holdInputCallbackTable[code].Add(callback);
     }
