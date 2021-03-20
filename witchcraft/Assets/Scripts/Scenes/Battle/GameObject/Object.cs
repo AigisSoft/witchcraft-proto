@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Object : MonoBehaviour
+public class Object : IObserver
 {
     protected new Rigidbody rigidbody;
 
