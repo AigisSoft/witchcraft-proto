@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Assets.Scripts.Commons
+namespace Assets.Scripts.Sounds
 {
     public class SoundHandle
     {
