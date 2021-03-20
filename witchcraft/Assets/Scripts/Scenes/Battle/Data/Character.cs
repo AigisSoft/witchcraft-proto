@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Character : Observer
 {
-
     protected float maxMoveSpeed = 5.0f;
     protected float minMoveSpeed = 0.1f;
     protected float currentMoveSpeed = 0.0f;
