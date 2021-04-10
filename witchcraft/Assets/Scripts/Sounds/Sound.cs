@@ -50,6 +50,10 @@ namespace Assets.Scripts.Sounds
         /// </summary>
         Inactive,
         /// <summary>
+        /// 待機
+        /// </summary>
+        Idle,
+        /// <summary>
         /// ロード中
         /// </summary>
         Loading,
@@ -96,8 +100,6 @@ namespace Assets.Scripts.Sounds
 
         public void Start()
         {
-            SoundParameter p = new SoundParameter();
-            Load(p);
         }
 
         /// <summary>
@@ -110,6 +112,8 @@ namespace Assets.Scripts.Sounds
             if (status != SoundStatus.Inactive)
                 return;
 
+            status = SoundStatus.Idle;
+
             parameter = param;
 
             Source = this.gameObject.AddComponent<AudioSource>();
@@ -119,27 +123,50 @@ namespace Assets.Scripts.Sounds
             Source.volume = parameter.Volume;
 
 
-            Task<bool> isExist = AddressablesUtil.ExistsAsync("Assets/Audio/same_bgm.mp3");
-            if (!await isExist)
+            Task<bool> isExist = AddressablesUtil.ExistsAsync(parameter.Address);
+            if (await isExist)
             {
                 status = SoundStatus.Inactive;
+                Debug.LogErrorFormat("SoundLoadError : Invalid Address [{0}]", parameter.Address);
                 return;
             }
 
             status = SoundStatus.Loading;
-            Handle = Addressables.LoadAssetAsync<AudioClip>("Assets/Audio/same_bgm.mp3");
+            Handle = Addressables.LoadAssetAsync<AudioClip>(parameter.Address);
             Handle.Completed += LoadCompleted;
         }
 
-        public void Play()
+        /// <summary>
+        /// 再生処理
+        /// </summary>
+        /// <returns>true:成功 / false:失敗</returns>
+        public bool Play()
         {
-            Source.Play();
-            status = SoundStatus.Playing;
+            if (!Source.isPlaying && status == SoundStatus.Loaded)
+            {
+                Source.Play();
+                status = SoundStatus.Playing;
+
+                return true;
+            }
+            return false;
         }
 
-        public void Stop()
+        /// <summary>
+        /// 停止処理　（即解放）
+        /// </summary>
+        /// <returns>true:成功 / false:失敗</returns>
+        public bool Stop()
         {
+            if(Source.isPlaying && status == SoundStatus.Playing)
+            {
+                Source.Stop();
+                status = SoundStatus.Inactive;
 
+                Addressables.Release(Handle);
+                return true;
+            }
+            return false;
         }
 
         /// <summary>
@@ -154,7 +181,10 @@ namespace Assets.Scripts.Sounds
             Source.clip = Audio;
             if (parameter.Immediately)
             {
-                Play();
+                if(!Play())
+                {
+                    Debug.LogErrorFormat("SoundPlayError : Unable to play");
+                }
             }
         }
     }

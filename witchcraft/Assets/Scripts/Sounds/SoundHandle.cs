@@ -4,8 +4,8 @@ namespace Assets.Scripts.Sounds
 {
     public class SoundHandle
     {
-        UInt16 Category = 0;
-        UInt16 Number = 0;
+        public UInt16 Category = 0;
+        public UInt16 Number = 0;
 
         public SoundHandle(UInt16 category = 0, UInt16 number = 0)
         {
