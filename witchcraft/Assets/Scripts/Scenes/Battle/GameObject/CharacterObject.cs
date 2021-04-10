@@ -32,10 +32,13 @@ public class CharacterObject : Object
     protected float moveRotationSpeed = 3.0f;
     protected Vector2 moveDirection = new Vector2(0, 0);
 
+    protected GameObject focusItemObject;
+
     // Start is called before the first frame update
     protected override void Start()
     {
         base.Start();
+        focusItemObject = null;
     }
 
     // Update is called once per frame
@@ -47,7 +50,7 @@ public class CharacterObject : Object
     }
 
     void Move()
-    { 
+    {
         if (rigidbody == null)
         {
             Debug.LogError(this.gameObject + "にRigidbodyがアタッチされていません");
@@ -63,7 +66,6 @@ public class CharacterObject : Object
             CurrentMoveSpeed += moveAcceleration;
         }
 
-        Debug.Log(currentMoveSpeed);
         rigidbody.MovePosition(rigidbody.position + (transform.forward * currentMoveSpeed * Time.deltaTime));
     }
 
@@ -78,5 +80,21 @@ public class CharacterObject : Object
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0, direction, 0), moveRotationSpeed * Time.deltaTime);
         moveDirection.x = 0f;
         moveDirection.y = 0f;
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Mana")
+        {
+            focusItemObject = other.gameObject;
+        }
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (focusItemObject == other.gameObject)
+        {
+            focusItemObject = null;
+        }
     }
 }

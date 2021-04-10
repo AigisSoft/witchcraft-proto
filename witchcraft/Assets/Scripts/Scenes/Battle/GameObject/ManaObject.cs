@@ -4,15 +4,22 @@ using UnityEngine;
 
 public class ManaObject : MonoBehaviour
 {
+    BoxCollider boxCollider;
     // Start is called before the first frame update
     void Start()
     {
-        
+        boxCollider = this.gameObject.GetComponent<BoxCollider>();
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    public void PickUp()
+    {
+        boxCollider.size = new Vector3(0, 0, 0);
+        Destroy(this.gameObject, 0.5f);
     }
 }

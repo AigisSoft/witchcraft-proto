@@ -13,6 +13,8 @@ public class PlayerObject : CharacterObject
         InputManager.Instance.SetHoldInputCallback(KeyCode.DownArrow, HoldInputDownArrow);
         InputManager.Instance.SetHoldInputCallback(KeyCode.LeftArrow, HoldInputLeftArrow);
         InputManager.Instance.SetHoldInputCallback(KeyCode.RightArrow, HoldInputRightArrow);
+
+        InputManager.Instance.SetHoldInputCallback(KeyCode.A, PickUpFocusItem);
     }
 
     // Update is called once per frame
@@ -40,6 +42,14 @@ public class PlayerObject : CharacterObject
     void HoldInputRightArrow()
     {
         moveDirection.x = 1.0f;
+    }
+
+    void PickUpFocusItem()
+    {
+        if (focusItemObject)
+        {
+            focusItemObject.GetComponent<ManaObject>().PickUp();
+        }
     }
     #endregion
 }
