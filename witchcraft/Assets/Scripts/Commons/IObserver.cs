@@ -28,7 +28,7 @@ public class IObserver : MonoBehaviour
         }
         else
         {
-            Debug.Log(eventName + "is not exist event method.");
+            Debug.Log(eventName + " is not exist event method.");
         }
     }
 }

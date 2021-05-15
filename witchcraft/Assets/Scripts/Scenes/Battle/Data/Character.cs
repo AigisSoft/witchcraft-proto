@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class Character : Observer
 {
-    protected float maxMoveSpeed = 5.0f;
-    protected float minMoveSpeed = 0.1f;
+    public float maxMoveSpeed = 5.0f;
+    public float minMoveSpeed = 0.1f;
     protected float currentMoveSpeed = 0.0f;
-    protected float CurrentMoveSpeed
+    public float CurrentMoveSpeed
     {
         get
         {
@@ -27,10 +27,24 @@ public class Character : Observer
         }
     }
 
-    protected float moveAcceleration = 2.0f;
-    protected float moveDecelerate = 0.5f;
-    protected float moveRotationSpeed = 3.0f;
-    protected Vector2 moveDirection = new Vector2(0, 0);
+    public float moveAcceleration = 2.0f;
+    public float moveDecelerate = 0.5f;
+    public float moveRotationSpeed = 3.0f;
+    public Vector2 moveDirection = new Vector2(0, 0);
+
+    protected GameObject focusItemObject;
+    public GameObject FocusItemObject
+    {
+        get
+        {
+            return focusItemObject;
+        }
+        set
+        {
+            focusItemObject = value;
+            NotifyEvent("EVENT_setFocusItemObject");
+        }
+    }
 
     // Start is called before the first frame update
     void Start()

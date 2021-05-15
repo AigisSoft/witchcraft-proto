@@ -26,30 +26,30 @@ public class PlayerObject : CharacterObject
 #region Input API
     void HoldInputUpArrow()
     {
-        moveDirection.y = 1.0f;
+        characterData.moveDirection.y = 1.0f;
     }
 
     void HoldInputDownArrow()
     {
-        moveDirection.y = -1.0f;
+        characterData.moveDirection.y = -1.0f;
     }
 
     void HoldInputLeftArrow()
     {
-        moveDirection.x = -1.0f;
+        characterData.moveDirection.x = -1.0f;
     }
 
     void HoldInputRightArrow()
     {
-        moveDirection.x = 1.0f;
+        characterData.moveDirection.x = 1.0f;
     }
 
     void PickUpFocusItem()
     {
-        if (focusItemObject)
+        if (characterData.FocusItemObject)
         {
-            focusItemObject.GetComponent<ManaObject>().PickUp();
+            characterData.FocusItemObject.GetComponent<ManaObject>().PickUp();
         }
     }
-    #endregion
+#endregion
 }

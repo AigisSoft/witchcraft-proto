@@ -5,6 +5,17 @@ using UnityEngine;
 public class Crystal : Observer
 {
     Define.Elements.TYPE elementType;
+    public Define.Elements.TYPE ElementType
+    {
+        get
+        {
+            return elementType;
+        }
+        set
+        {
+            elementType = value;
+        }
+    }
 
     // Start is called before the first frame update
     void Start()

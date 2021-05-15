@@ -1,44 +1,20 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
+using System.Reflection;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class CharacterObject : Object
 {
-    protected float maxMoveSpeed = 5.0f;
-    protected float minMoveSpeed = 0.1f;
-    protected float currentMoveSpeed = 0.0f;
-    protected float CurrentMoveSpeed
-    {
-        get
-        {
-            return currentMoveSpeed;
-        }
-        set
-        {
-            currentMoveSpeed = value;
-            if (currentMoveSpeed >= maxMoveSpeed)
-            {
-                currentMoveSpeed = maxMoveSpeed;
-            }
-            else if (minMoveSpeed > currentMoveSpeed)
-            {
-                currentMoveSpeed = 0;
-            }
-        }
-    }
-
-    protected float moveAcceleration = 2.0f;
-    protected float moveDecelerate = 0.5f;
-    protected float moveRotationSpeed = 3.0f;
-    protected Vector2 moveDirection = new Vector2(0, 0);
-
-    protected GameObject focusItemObject;
+    protected Character characterData;
 
     // Start is called before the first frame update
     protected override void Start()
     {
         base.Start();
-        focusItemObject = null;
+        characterData = this.gameObject.GetComponent<Character>();
+        characterData.FocusItemObject = null;
+        characterData.AddListener(this);
     }
 
     // Update is called once per frame
@@ -57,44 +33,63 @@ public class CharacterObject : Object
             return;
         }
 
+        Vector2 moveDirection = characterData.moveDirection;
         if (moveDirection.x == 0 && moveDirection.y == 0)
         {
-            CurrentMoveSpeed = currentMoveSpeed * moveDecelerate;
+            characterData.CurrentMoveSpeed = characterData.CurrentMoveSpeed * characterData.moveDecelerate;
         }
         else
         {
-            CurrentMoveSpeed += moveAcceleration;
+            characterData.CurrentMoveSpeed += characterData.moveAcceleration;
         }
 
-        rigidbody.MovePosition(rigidbody.position + (transform.forward * currentMoveSpeed * Time.deltaTime));
+        rigidbody.MovePosition(rigidbody.position + (transform.forward * characterData.CurrentMoveSpeed * Time.deltaTime));
     }
 
     void Rotation()
     {
+        Vector2 moveDirection = characterData.moveDirection;
+
         if (moveDirection.x == 0 && moveDirection.y == 0)
         {
             return;
         }
 
         float direction = Mathf.Atan2(moveDirection.x, moveDirection.y) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0, direction, 0), moveRotationSpeed * Time.deltaTime);
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0, direction, 0), characterData.moveRotationSpeed * Time.deltaTime);
         moveDirection.x = 0f;
         moveDirection.y = 0f;
+
+        characterData.moveDirection = moveDirection;
     }
 
     void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Mana")
         {
-            focusItemObject = other.gameObject;
+            characterData.FocusItemObject = other.gameObject;
         }
     }
 
     void OnTriggerExit(Collider other)
     {
-        if (focusItemObject == other.gameObject)
+        if (characterData.FocusItemObject == other.gameObject)
         {
-            focusItemObject = null;
+            characterData.FocusItemObject = null;
         }
     }
+
+    #region Observer EVENT
+    public void EVENT_setFocusItemObject()
+    {
+        if (characterData.FocusItemObject != null)
+        {
+            Debug.Log("FocusItemObject = " + characterData.FocusItemObject.tag);
+        }
+        else
+        {
+            Debug.Log("FocusItemObject = null");
+        }
+    }
+    #endregion
 }
