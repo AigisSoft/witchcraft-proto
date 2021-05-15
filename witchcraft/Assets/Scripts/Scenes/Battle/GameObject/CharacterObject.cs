@@ -91,5 +91,10 @@ public class CharacterObject : Object
             Debug.Log("FocusItemObject = null");
         }
     }
+
+    public void EVENT_setPossessionMana()
+    {
+        Debug.Log("update possession mana.");
+    }
     #endregion
 }

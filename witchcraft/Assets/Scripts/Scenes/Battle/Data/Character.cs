@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -46,15 +47,59 @@ public class Character : Observer
         }
     }
 
+    protected int[] possessionManaCountTable;
+    protected int maxPossessionMana = 3;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        int length = Enum.GetNames(typeof(Define.Elements.TYPE)).Length;
+        possessionManaCountTable = new int[length];
+        for (int i = 0; i < length; i++)
+        {
+            possessionManaCountTable[i] = 0;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    public bool CanPickUpMana(Define.Elements.TYPE elementType)
+    {
+        int index = (int)elementType;
+        if (possessionManaCountTable[index] < maxPossessionMana)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public void SetPossessionMana(Define.Elements.TYPE elementType, int count)
+    {
+        int index = (int)elementType;
+        possessionManaCountTable[index] += count;
+
+        if (maxPossessionMana < possessionManaCountTable[index])
+        {
+            possessionManaCountTable[index] = maxPossessionMana;
+        }
+        else if (possessionManaCountTable[index] < 0)
+        {
+            possessionManaCountTable[index] = 0;
+        }
+
+        NotifyEvent("EVENT_setPossessionMana");
+    }
+
+    public void AddPossessionMana(Define.Elements.TYPE elementType, int count)
+    {
+        int index = (int)elementType;
+        int possession = possessionManaCountTable[index] + count;
+
+        SetPossessionMana(elementType, possession);
     }
 }

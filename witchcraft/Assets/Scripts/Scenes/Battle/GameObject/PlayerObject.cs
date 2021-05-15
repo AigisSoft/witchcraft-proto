@@ -46,10 +46,30 @@ public class PlayerObject : CharacterObject
 
     void PickUpFocusItem()
     {
-        if (characterData.FocusItemObject)
+        if (characterData.FocusItemObject == null)
         {
-            characterData.FocusItemObject.GetComponent<ManaObject>().PickUp();
+            return;
+        }
+
+        if (characterData.FocusItemObject.tag == "Mana")
+        {
+            PickUpManaItem();
         }
     }
-#endregion
+
+    void PickUpManaItem()
+    {
+        ManaObject targetMana = characterData.FocusItemObject.GetComponent<ManaObject>();
+        Define.Elements.TYPE targetType = targetMana.GetElementType();
+
+        if (characterData.CanPickUpMana(targetType) == false)
+        {
+            return;
+        }
+
+        targetMana.PickUp();
+
+        characterData.AddPossessionMana(targetType, 1);
+    }
+    #endregion
 }
