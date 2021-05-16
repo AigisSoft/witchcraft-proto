@@ -20,6 +20,9 @@ public class PlayerObject : CharacterObject
         InputManager.Instance.SetHoldInputCallback(KeyCode.W, ChantAero);
         InputManager.Instance.SetHoldInputCallback(KeyCode.S, ChantHydro);
         InputManager.Instance.SetHoldInputCallback(KeyCode.D, ChantGeo);
+
+        InputManager.Instance.SetDownInputCallback(KeyCode.R, DownInputAttackButton);
+        InputManager.Instance.SetUpInputCallback(KeyCode.R, UpInputAttackButton);
     }
 
     // Update is called once per frame
@@ -119,6 +122,18 @@ public class PlayerObject : CharacterObject
 
         Debug.Log("ChantGeo");
         characterData.AddChantingMana(Define.Elements.TYPE.GEO);
+    }
+
+    void DownInputAttackButton()
+    {
+        Debug.Log("DownInputAttackButton");
+        characterData.SetTargetingAttackEnabled(true);
+    }
+
+    void UpInputAttackButton()
+    {
+        Debug.Log("UpInputAttackButton");
+        characterData.Attack();
     }
     #endregion
 }

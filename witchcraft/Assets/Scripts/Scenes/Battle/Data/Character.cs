@@ -163,4 +163,16 @@ public class Character : Observer
 
         NotifyEvent("EVENT_addChantingMana");
     }
+
+    public void SetTargetingAttackEnabled(bool enable)
+    {
+        NotifyEvent("EVENT_setTargetingAttackEnabled");
+    }
+
+    public void Attack()
+    {
+        SetTargetingAttackEnabled(false);
+        ClearChantingMana();
+        NotifyEvent("EVENT_attack");
+    }
 }
