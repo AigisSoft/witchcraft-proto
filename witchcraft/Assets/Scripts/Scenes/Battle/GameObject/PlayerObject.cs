@@ -14,7 +14,12 @@ public class PlayerObject : CharacterObject
         InputManager.Instance.SetHoldInputCallback(KeyCode.LeftArrow, HoldInputLeftArrow);
         InputManager.Instance.SetHoldInputCallback(KeyCode.RightArrow, HoldInputRightArrow);
 
-        InputManager.Instance.SetHoldInputCallback(KeyCode.A, PickUpFocusItem);
+        InputManager.Instance.SetHoldInputCallback(KeyCode.Q, PickUpFocusItem);
+
+        InputManager.Instance.SetHoldInputCallback(KeyCode.A, ChantPyro);
+        InputManager.Instance.SetHoldInputCallback(KeyCode.W, ChantAero);
+        InputManager.Instance.SetHoldInputCallback(KeyCode.S, ChantHydro);
+        InputManager.Instance.SetHoldInputCallback(KeyCode.D, ChantGeo);
     }
 
     // Update is called once per frame
@@ -70,6 +75,50 @@ public class PlayerObject : CharacterObject
         targetMana.PickUp();
 
         characterData.AddPossessionMana(targetType, 1);
+    }
+
+    void ChantPyro()
+    {
+        if (characterData.CanChantMana(Define.Elements.TYPE.PYRO) == false)
+        {
+            return;
+        }
+
+        Debug.Log("ChantPyro");
+        characterData.AddChantingMana(Define.Elements.TYPE.PYRO);
+    }
+
+    void ChantAero()
+    {
+        if (characterData.CanChantMana(Define.Elements.TYPE.AERO) == false)
+        {
+            return;
+        }
+
+        Debug.Log("ChantAero");
+        characterData.AddChantingMana(Define.Elements.TYPE.AERO);
+    }
+
+    void ChantHydro()
+    {
+        if (characterData.CanChantMana(Define.Elements.TYPE.HYDRO) == false)
+        {
+            return;
+        }
+
+        Debug.Log("ChantHydro");
+        characterData.AddChantingMana(Define.Elements.TYPE.HYDRO);
+    }
+
+    void ChantGeo()
+    {
+        if (characterData.CanChantMana(Define.Elements.TYPE.GEO) == false)
+        {
+            return;
+        }
+
+        Debug.Log("ChantGeo");
+        characterData.AddChantingMana(Define.Elements.TYPE.GEO);
     }
     #endregion
 }

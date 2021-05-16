@@ -50,6 +50,10 @@ public class Character : Observer
     protected int[] possessionManaCountTable;
     protected int maxPossessionMana = 3;
 
+    protected Define.Elements.TYPE?[] chantingManaCountTable;
+    protected int maxChantingMana = 3;
+    protected int currentChantIndex = 0;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -59,6 +63,9 @@ public class Character : Observer
         {
             possessionManaCountTable[i] = 0;
         }
+
+        chantingManaCountTable = new Define.Elements.TYPE?[maxChantingMana];
+        currentChantIndex = 0;
     }
 
     // Update is called once per frame
@@ -76,6 +83,12 @@ public class Character : Observer
         }
 
         return false;
+    }
+
+    public int GetPossessionMana(Define.Elements.TYPE elementType)
+    {
+        int index = (int)elementType;
+        return possessionManaCountTable[index];
     }
 
     public void SetPossessionMana(Define.Elements.TYPE elementType, int count)
@@ -101,5 +114,53 @@ public class Character : Observer
         int possession = possessionManaCountTable[index] + count;
 
         SetPossessionMana(elementType, possession);
+    }
+
+    public bool CanChantMana(Define.Elements.TYPE elementType)
+    {
+        if (maxChantingMana <= currentChantIndex)
+        {
+            return false;
+        }
+
+        int currentChantTargetMana = 0;
+        for (int i = 0; i < maxChantingMana; i++)
+        {
+            if (chantingManaCountTable[i] == elementType)
+            {
+                currentChantTargetMana += 1;
+            }
+        }
+
+        if (GetPossessionMana(elementType) < currentChantTargetMana + 1)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    public void ClearChantingMana()
+    {
+        for (int i = 0; i < maxChantingMana; i++)
+        {
+            chantingManaCountTable[i] = null;
+        }
+
+        currentChantIndex = 0;
+    }
+
+    public void AddChantingMana(Define.Elements.TYPE elementType)
+    {
+        if (CanChantMana(elementType) == false)
+        {
+            return;
+        }
+
+        chantingManaCountTable[currentChantIndex] = elementType;
+
+        currentChantIndex += 1;
+
+        NotifyEvent("EVENT_addChantingMana");
     }
 }
