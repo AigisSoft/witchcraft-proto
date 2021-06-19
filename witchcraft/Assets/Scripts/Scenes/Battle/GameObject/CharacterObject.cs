@@ -7,6 +7,7 @@ using UnityEngine;
 public class CharacterObject : Object
 {
     protected Character characterData;
+    public AttackInputParticle attackCircle;
 
     // Start is called before the first frame update
     protected override void Start()
@@ -23,6 +24,13 @@ public class CharacterObject : Object
         Move();
         Rotation();
         base.Update();
+
+        if (characterData.isTargetingAttackEnabled == true)
+        {
+            Vector3 pos = this.transform.position;
+            pos.y = 0.1f;
+            attackCircle.gameObject.transform.position = pos;
+        }
     }
 
     void Move()
@@ -96,5 +104,24 @@ public class CharacterObject : Object
     {
         Debug.Log("update possession mana.");
     }
+
+    public void EVENT_attack()
+    {
+
+    }
+
+    public void EVENT_setTargetingAttackEnabled()
+    {
+        if (characterData.isTargetingAttackEnabled == true)
+        {
+            attackCircle.StartAnimation();
+        }
+
+        if (characterData.isTargetingAttackEnabled == false)
+        {
+            attackCircle.FinishAnimation();
+        }
+    }
+    
     #endregion
 }

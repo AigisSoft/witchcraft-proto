@@ -54,6 +54,8 @@ public class Character : Observer
     protected int maxChantingMana = 3;
     protected int currentChantIndex = 0;
 
+    public bool isTargetingAttackEnabled = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -66,6 +68,8 @@ public class Character : Observer
 
         chantingManaCountTable = new Define.Elements.TYPE?[maxChantingMana];
         currentChantIndex = 0;
+
+        SetTargetingAttackEnabled(false);
     }
 
     // Update is called once per frame
@@ -166,6 +170,7 @@ public class Character : Observer
 
     public void SetTargetingAttackEnabled(bool enable)
     {
+        isTargetingAttackEnabled = enable;
         NotifyEvent("EVENT_setTargetingAttackEnabled");
     }
 
