@@ -254,12 +254,56 @@ public class InputManager : SingletonMonoBehaviour<InputManager>
     }
 
     /// <summary>
+    /// upInputに登録されているイベントのリムーブを行う
+    /// </summary>
+    /// <param name="code">登録されているキーコード</param>
+    /// <param name="callback">登録されているコールバック</param>
+    public void RemoveUpInput(string code, Action callback)
+    {
+        RemoveUpInput(SetKeyCode(code), callback);
+    }
+
+    /// <summary>
+    /// downInputに登録されているイベントのリムーブを行う
+    /// </summary>
+    /// <param name="code">登録されているキーコード</param>
+    /// <param name="callback">登録されているコールバック</param>
+    public void RemoveDownInput(string code, Action callback)
+    {
+        RemoveDownInput(SetKeyCode(code), callback);
+    }
+
+    /// <summary>
+    /// holdInputに登録されているイベントのリムーブを行う
+    /// </summary>
+    /// <param name="code">登録されているキーコード</param>
+    /// <param name="callback">登録されているコールバック</param>
+    public void RemoveHoldInput(string code, Action callback)
+    {
+        RemoveHoldInput(SetKeyCode(code), callback);
+    }
+
+    public void RemoveStickInput(string code, Action<Vector2> callback)
+    {
+        stickInputCallbackTable[code].Remove(callback);
+    }
+
+    public void RemoveTriggerInput(string code, Action<float> callback)
+    {
+        triggerInputCallbackTable[code].Remove(callback);
+    }
+
+    //public void RemoveTriggerInput()
+
+    /// <summary>
     /// 登録してあるイベントを全て削除
     /// </summary>
-    public void ClearInput()
+    public void AllClearInput()
     {
         upInputCallbackTable.Clear();
         downInputCallbackTable.Clear();
         holdInputCallbackTable.Clear();
+        stickInputCallbackTable.Clear();
+        triggerInputCallbackTable.Clear();
     }
 }
